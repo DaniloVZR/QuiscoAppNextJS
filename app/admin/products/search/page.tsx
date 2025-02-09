@@ -2,7 +2,6 @@ import { ProductSearchForm } from "@/components/products/ProductSearchForm";
 import { ProductsTable } from "@/components/products/ProductsTable";
 import { Heading } from "@/components/ui/Heading"
 import { prisma } from "@/src/lib/prisma";
-import Link from "next/link";
 
 const searchProducts = async (searchTerm: string) => {
   const products = await prisma.product.findMany({
@@ -19,9 +18,10 @@ const searchProducts = async (searchTerm: string) => {
   return products
 }
 
-const SearchPage = async ({ searchParams }: { searchParams: { search?: string } }) => {
+const SearchPage = async ({ searchParams }: { searchParams: Promise<{ search?: string }> }) => {
 
-  const searchTerm = searchParams.search || ''
+  const searchPrm = (await searchParams).search
+  const searchTerm = searchPrm || ''
   const products = await searchProducts(searchTerm)
 
   return (

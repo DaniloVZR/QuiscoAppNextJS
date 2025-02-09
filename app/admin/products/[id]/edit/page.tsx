@@ -3,8 +3,7 @@ import { ProductForm } from "@/components/products/ProductForm"
 import { GoBackButton } from "@/components/ui/GoBackButton"
 import { Heading } from "@/components/ui/Heading"
 import { prisma } from "@/src/lib/prisma"
-import Link from "next/link"
-import { notFound, redirect } from "next/navigation"
+import { notFound } from "next/navigation"
 
 const getProductById = async (id: number) => {
   const product = await prisma.product.findUnique({
@@ -19,9 +18,10 @@ const getProductById = async (id: number) => {
   return product
 }
 
-const EditProductsPage = async ({ params }: { params: { id: string } }) => {
+const EditProductsPage = async ({ params }: { params: Promise<{ id: string }> }) => {
 
-  const product = await getProductById(+params.id)
+  const id = (await params).id
+  const product = await getProductById(+id)
 
   return (
     <>

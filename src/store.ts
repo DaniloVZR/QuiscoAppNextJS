@@ -17,7 +17,7 @@ export const useStore = create<Store>((set, get) => ({
   // Add to order
   addToOrder: (product) => {
 
-    const { categoryId, image, ...data } = product
+    const { ...data } = product
 
     let order: TOrderItem[] = []
     const existingItem = get().order.find(item => item.id === data.id);
